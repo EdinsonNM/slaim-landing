@@ -100,9 +100,9 @@ export default function HeroScroll() {
           transform: `translate3d(0, ${p * PARALLAX_STICKY_Y}px, 0)`,
         }}
       >
-        {/* Columna izquierda: texto (centrado y responsive) */}
+        {/* Columna izquierda: texto (centrado en desktop; más arriba en móvil, pegado a la animación) */}
         <div
-          className="pointer-events-none flex-1 flex flex-col justify-center items-center px-4 sm:px-6 md:px-10 md:pl-12 md:pr-8 lg:pl-16 lg:pr-12 min-w-0 order-2 md:order-1"
+          className="pointer-events-none flex-1 flex flex-col justify-start md:justify-center items-center pt-2 sm:pt-4 md:pt-0 px-4 sm:px-6 md:px-10 md:pl-12 md:pr-8 lg:pl-16 lg:pr-12 min-w-0 order-2 md:order-1"
           style={{
             transform: `translate3d(0, ${p * PARALLAX_OVERLAY_Y}px, 0)`,
           }}

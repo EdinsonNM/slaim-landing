@@ -103,7 +103,13 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
   }
 
   return (
-    <div className={isHero ? "mt-6" : "mt-8 flex flex-wrap justify-center gap-3"}>
+    <div
+      className={
+        isHero
+          ? "mt-6 flex flex-wrap justify-center gap-3 sm:gap-4"
+          : "mt-8 flex flex-wrap justify-center gap-3"
+      }
+    >
       <a
         href={DOWNLOAD_URLS.mac}
         className={buttonClass}
