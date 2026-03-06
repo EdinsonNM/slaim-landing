@@ -10,6 +10,7 @@ import {
 } from "./constants";
 
 const VIDEO_SRC = "/video.mp4";
+const PLACEHOLDER_IMAGE = "/character.png";
 
 /** Opacidad para un texto con data-progress="min,max": fade in/out en los bordes */
 function textOpacity(progress: number, min: number, max: number): number {
@@ -63,6 +64,7 @@ export default function HeroScroll() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
 
   const getScrollProgress = useCallback((): number => {
     const section = sectionRef.current;
@@ -98,18 +100,18 @@ export default function HeroScroll() {
           transform: `translate3d(0, ${p * PARALLAX_STICKY_Y}px, 0)`,
         }}
       >
-        {/* Columna izquierda: texto */}
+        {/* Columna izquierda: texto (centrado y responsive) */}
         <div
-          className="pointer-events-none flex-1 flex flex-col justify-center px-6 sm:px-10 md:pl-12 md:pr-8 lg:pl-16 lg:pr-12 min-w-0 order-2 md:order-1"
+          className="pointer-events-none flex-1 flex flex-col justify-center items-center px-4 sm:px-6 md:px-10 md:pl-12 md:pr-8 lg:pl-16 lg:pr-12 min-w-0 order-2 md:order-1"
           style={{
             transform: `translate3d(0, ${p * PARALLAX_OVERLAY_Y}px, 0)`,
           }}
         >
-          <div className="pointer-events-auto w-full max-w-xl text-white relative min-h-[200px] sm:min-h-[220px] flex flex-col justify-center">
+          <div className="pointer-events-auto w-full max-w-xl text-white relative min-h-[200px] sm:min-h-[220px] flex flex-col justify-center items-center text-center">
             {HERO_SLIDES.map((slide, i) => (
               <div
                 key={i}
-                className="absolute inset-0 flex flex-col justify-center transition-opacity duration-300"
+                className="absolute inset-0 flex flex-col justify-center items-center text-center transition-opacity duration-300 px-2 sm:px-0"
                 style={{
                   opacity: textOpacity(p, slide.min, slide.max),
                   pointerEvents: textOpacity(p, slide.min, slide.max) > 0.5 ? "auto" : "none",
@@ -117,21 +119,21 @@ export default function HeroScroll() {
                 aria-hidden={textOpacity(p, slide.min, slide.max) < 0.5}
               >
                 <h1
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight drop-shadow-lg"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight drop-shadow-lg leading-tight"
                   style={{ opacity: 1 - p * 0.15 }}
                 >
                   {slide.title}
                 </h1>
-                <p className="mt-4 text-base sm:text-lg text-white/90 max-w-xl">
+                <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-white/90 max-w-xl mx-auto">
                   {slide.subtitle}
                 </p>
-                <div className="mt-4">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-sm text-white/95 backdrop-blur-sm max-w-[90%] sm:max-w-none">
+                <div className="mt-3 sm:mt-4 flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs sm:text-sm text-white/95 backdrop-blur-sm max-w-[95%] sm:max-w-none text-center">
                     <span className="size-1.5 shrink-0 rounded-full bg-emerald-400" aria-hidden />
                     Herramienta gratuita para la comunidad de desarrolladores
                   </span>
                 </div>
-                <div className="mt-6">
+                <div className="mt-4 sm:mt-6 flex justify-center w-full">
                   <DownloadCTA variant="hero" />
                 </div>
               </div>
@@ -139,17 +141,28 @@ export default function HeroScroll() {
           </div>
         </div>
 
-        {/* Columna derecha: video (completo, sin recortar) */}
+        {/* Columna derecha: video (completo, sin recortar) — placeholder mientras carga */}
         <div className="flex-1 min-w-0 relative bg-[#000] order-1 md:order-2 h-[40vh] md:h-full flex items-center justify-center p-4">
+          {/* Placeholder: personaje mientras carga el video */}
+          <img
+            src={PLACEHOLDER_IMAGE}
+            alt=""
+            className="absolute inset-0 w-full h-full object-contain transition-opacity duration-500"
+            style={{ opacity: videoReady ? 0 : 1 }}
+            aria-hidden
+            fetchPriority="high"
+          />
           <video
             ref={videoRef}
             src={VIDEO_SRC}
-            className="max-w-full max-h-full w-auto h-auto object-contain"
+            className="max-w-full max-h-full w-auto h-auto object-contain transition-opacity duration-500"
+            style={{ opacity: videoReady ? 1 : 0 }}
             autoPlay
             muted
             loop
             playsInline
             aria-hidden
+            onCanPlay={() => setVideoReady(true)}
           />
         </div>
 

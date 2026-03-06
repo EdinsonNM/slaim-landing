@@ -29,9 +29,12 @@ function getOS(): OS {
   return null;
 }
 
+const RELEASE_BASE =
+  "https://github.com/EdinsonNM/slides-for-devs/releases/download/v0.1.1";
+
 const DOWNLOAD_URLS = {
-  mac: "#", // Sustituir por URL real: ej. /download/slaim-mac.dmg o enlace externo
-  win: "#", // Sustituir por URL real: ej. /download/slaim-win.exe
+  mac: `${RELEASE_BASE}/Slaim.app.tar.gz`,
+  win: `${RELEASE_BASE}/Slaim_0.1.1_x64-setup.exe`,
 } as const;
 
 type Variant = "hero" | "section";
@@ -47,13 +50,13 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
 
   const isHero = variant === "hero";
   const baseClass =
-    "inline-flex items-center justify-center gap-2.5 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0a0a0a]";
+    "inline-flex items-center justify-center gap-2 sm:gap-2.5 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] text-sm sm:text-base";
   const heroClass =
-    "px-6 py-3.5 bg-white text-zinc-900 hover:bg-white/90 shadow-lg hover:shadow-xl";
+    "px-4 py-3 sm:px-6 sm:py-3.5 bg-white text-zinc-900 hover:bg-white/90 shadow-lg hover:shadow-xl min-w-0";
   const sectionClass =
-    "px-8 py-4 bg-white text-zinc-900 hover:bg-white/90";
+    "px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-zinc-900 hover:bg-white/90";
   const buttonClass = `${baseClass} ${isHero ? heroClass : sectionClass}`;
-  const iconSize = isHero ? "w-5 h-5" : "w-6 h-6";
+  const iconSize = isHero ? "w-4 h-4 sm:w-5 sm:h-5" : "w-5 h-5 sm:w-6 sm:h-6";
 
   if (!mounted) {
     return (
