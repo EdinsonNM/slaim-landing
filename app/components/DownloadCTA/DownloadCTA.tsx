@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import { SiApple } from "react-icons/si";
 import { FaWindows } from "react-icons/fa";
 
+const REPO = "EdinsonNM/slides-for-devs";
+const GITHUB_LATEST = `https://api.github.com/repos/${REPO}/releases/latest`;
+
+/** URLs por defecto si falla la API (última conocida) */
+const FALLBACK_URLS = {
+  mac: `https://github.com/${REPO}/releases/latest/download/Slaim.app.tar.gz`,
+  win: `https://github.com/${REPO}/releases/download/v0.1.8/Slaim_0.1.8_x64-setup.exe`,
+} as const;
+
 type OS = "mac" | "win" | null;
 
 function getOS(): OS {
@@ -29,24 +38,51 @@ function getOS(): OS {
   return null;
 }
 
-const RELEASE_BASE =
-  "https://github.com/EdinsonNM/slides-for-devs/releases/download/v0.1.1";
+type ReleaseAsset = { name: string; browser_download_url: string };
 
-const DOWNLOAD_URLS = {
-  mac: `${RELEASE_BASE}/Slaim.app.tar.gz`,
-  win: `${RELEASE_BASE}/Slaim_0.1.1_x64-setup.exe`,
-} as const;
+function getDownloadUrlsFromRelease(assets: ReleaseAsset[]): {
+  mac: string;
+  win: string;
+} {
+  const mac =
+    assets.find(
+      (a) =>
+        a.name === "Slaim.app.tar.gz" ||
+        (a.name.endsWith(".app.tar.gz") && !a.name.endsWith(".sig"))
+    )?.browser_download_url ?? FALLBACK_URLS.mac;
+  const win =
+    assets.find(
+      (a) =>
+        a.name.includes("x64-setup.exe") && !a.name.endsWith(".sig")
+    )?.browser_download_url ?? FALLBACK_URLS.win;
+  return { mac, win };
+}
 
 type Variant = "hero" | "section";
 
 export default function DownloadCTA({ variant = "section" }: { variant?: Variant }) {
   const [os, setOs] = useState<OS>(null);
   const [mounted, setMounted] = useState(false);
+  const [urls, setUrls] = useState<{ mac: string; win: string }>(FALLBACK_URLS);
 
   useEffect(() => {
     setOs(getOS());
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const controller = new AbortController();
+    fetch(GITHUB_LATEST, { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("Not ok"))))
+      .then((data: { assets?: ReleaseAsset[] }) => {
+        if (data?.assets?.length) {
+          setUrls(getDownloadUrlsFromRelease(data.assets));
+        }
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [mounted]);
 
   const isHero = variant === "hero";
   const baseClass =
@@ -76,7 +112,7 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
     return (
       <div className={isHero ? "mt-6" : "mt-8 flex flex-wrap justify-center gap-3"}>
         <a
-          href={DOWNLOAD_URLS.mac}
+          href={urls.mac}
           className={buttonClass}
           aria-label="Descargar Slaim para Mac"
         >
@@ -91,7 +127,7 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
     return (
       <div className={isHero ? "mt-6" : "mt-8 flex flex-wrap justify-center gap-3"}>
         <a
-          href={DOWNLOAD_URLS.win}
+          href={urls.win}
           className={buttonClass}
           aria-label="Descargar Slaim para Windows"
         >
@@ -111,7 +147,7 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
       }
     >
       <a
-        href={DOWNLOAD_URLS.mac}
+        href={urls.mac}
         className={buttonClass}
         aria-label="Descargar Slaim para Mac"
       >
@@ -119,7 +155,7 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
         Mac
       </a>
       <a
-        href={DOWNLOAD_URLS.win}
+        href={urls.win}
         className={buttonClass}
         aria-label="Descargar Slaim para Windows"
       >
