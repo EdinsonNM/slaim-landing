@@ -1,127 +1,89 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DownloadCTA from "@/app/components/DownloadCTA/DownloadCTA";
-import {
-  PARALLAX_OVERLAY_Y,
-  PARALLAX_STICKY_Y,
-  SCROLL_HEIGHT_VH,
-  TEXT_FADE_WINDOW,
-} from "./constants";
 
 const VIDEO_SRC = "/video.mp4";
 const PLACEHOLDER_IMAGE = "/character.png";
 
-/** Opacidad para un texto con data-progress="min,max": fade in/out en los bordes */
-function textOpacity(progress: number, min: number, max: number): number {
-  if (progress < min || progress > max) return 0;
-  const fadeInEnd = min + TEXT_FADE_WINDOW;
-  const fadeOutStart = max - TEXT_FADE_WINDOW;
-  // Primer slide (min === 0): visible desde el inicio sin esperar scroll
-  if (min === 0 && progress <= fadeInEnd) return 1;
-  // Último slide (max === 1): visible al final del scroll
-  if (max === 1 && progress >= fadeOutStart) return 1;
-  if (progress <= fadeInEnd) return (progress - min) / TEXT_FADE_WINDOW;
-  if (progress >= fadeOutStart) return (max - progress) / TEXT_FADE_WINDOW;
-  return 1;
-}
+/** Intervalo en ms entre cambios de titular */
+const ROTATION_INTERVAL_MS = 4500;
 
-/** Titulares que rotan con el scroll — copy orientado a curiosidad y conversión */
-const HERO_SLIDES: { title: string; subtitle: string; min: number; max: number }[] = [
+/** Titulares que rotan cada cierto tiempo */
+const HERO_SLIDES: { title: string; subtitle: string }[] = [
   {
     title: "¿Cuántas horas perdiste esta semana en diapositivas?",
     subtitle: "La audiencia recuerda tu mensaje, no tu diseño. Llega directo al punto.",
-    min: 0,
-    max: 0.22,
   },
   {
     title: "Tu idea merece ser escuchada.",
     subtitle: "Genera el contenido, refínalo y preséntalo. Sin atascarte en formatos.",
-    min: 0.2,
-    max: 0.42,
   },
   {
     title: "De la idea al escenario en minutos.",
     subtitle: "Slaim escribe contigo el guion, las notas de orador y las imágenes. Tú solo comunica.",
-    min: 0.4,
-    max: 0.62,
   },
   {
     title: "Presentaciones que enganchan. Cero estrés.",
     subtitle: "Menos tiempo en slides. Más impacto en la sala.",
-    min: 0.6,
-    max: 0.82,
   },
   {
     title: "Listo para presentar sin romperte la cabeza?",
     subtitle: "Descarga Slaim y deja que tu mensaje brille.",
-    min: 0.78,
-    max: 1,
   },
 ];
 
+const HERO_CARDS = [
+  { label: "Contenido", desc: "Genera y refina tu mensaje" },
+  { label: "Speech y notas", desc: "Tu guion y notas de orador" },
+  { label: "Imágenes", desc: "Generación visual integrada" },
+];
+
 export default function HeroScroll() {
-  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [videoReady, setVideoReady] = useState(false);
 
-  const getScrollProgress = useCallback((): number => {
-    const section = sectionRef.current;
-    if (!section) return 0;
-    const rect = section.getBoundingClientRect();
-    const sectionHeight = section.offsetHeight;
-    const winH = window.innerHeight;
-    const progress = -rect.top / (sectionHeight - winH);
-    return Math.max(0, Math.min(1, progress));
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, ROTATION_INTERVAL_MS);
+    return () => clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setScrollProgress(getScrollProgress());
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [getScrollProgress]);
-
-  const p = scrollProgress;
+  const cardIndex = Math.min(
+    Math.floor((currentSlide / HERO_SLIDES.length) * HERO_CARDS.length),
+    HERO_CARDS.length - 1
+  );
 
   return (
     <section
-      ref={sectionRef}
-      className="relative w-full bg-[#000]"
-      style={{ height: `${SCROLL_HEIGHT_VH}vh` }}
+      className="relative w-full h-screen bg-black/70"
       aria-label="Slaim: enfócate en comunicar, no en las diapositivas"
     >
-      <div
-        className="sticky top-0 left-0 w-full h-screen overflow-hidden flex flex-col md:flex-row bg-[#000]"
-        style={{
-          transform: `translate3d(0, ${p * PARALLAX_STICKY_Y}px, 0)`,
-        }}
-      >
-        {/* Columna izquierda: texto (centrado en desktop; más arriba en móvil, pegado a la animación) */}
-        <div
-          className="pointer-events-none flex-1 flex flex-col justify-start md:justify-center items-center pt-2 sm:pt-4 md:pt-0 px-4 sm:px-6 md:px-10 md:pl-12 md:pr-8 lg:pl-16 lg:pr-12 min-w-0 order-2 md:order-1"
-          style={{
-            transform: `translate3d(0, ${p * PARALLAX_OVERLAY_Y}px, 0)`,
-          }}
-        >
-          <div className="pointer-events-auto w-full max-w-xl text-white relative min-h-[200px] sm:min-h-[220px] flex flex-col justify-center items-center text-center">
-            {HERO_SLIDES.map((slide, i) => (
+      <div className="relative w-full h-full overflow-hidden flex flex-col md:flex-row">
+        {/* Gradiente suave a la izquierda para legibilidad del texto */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent pointer-events-none z-0" aria-hidden />
+        {/* Columna izquierda: texto que rota cada cierto tiempo */}
+        <div className="pointer-events-none flex-1 flex flex-col justify-start md:justify-center items-center pt-2 sm:pt-4 md:pt-0 px-4 sm:px-6 md:px-10 md:pl-12 md:pr-8 lg:pl-16 lg:pr-12 min-w-0 order-2 md:order-1">
+          {/* Altura fija: reserva espacio para el slide más alto y evita saltos sin cortar texto */}
+          <div className="w-full max-w-xl text-white relative h-[320px] sm:h-[360px] md:h-[380px] flex flex-col justify-center items-center text-center">
+            {HERO_SLIDES.map((slide, i) => {
+              const isActive = currentSlide === i;
+              const isPast = i < currentSlide;
+              return (
               <div
                 key={i}
-                className="absolute inset-0 flex flex-col justify-center items-center text-center transition-opacity duration-300 px-2 sm:px-0"
+                className="absolute inset-0 flex flex-col justify-center items-center text-center px-2 sm:px-0"
                 style={{
-                  opacity: textOpacity(p, slide.min, slide.max),
-                  pointerEvents: textOpacity(p, slide.min, slide.max) > 0.5 ? "auto" : "none",
+                  opacity: isActive ? 1 : 0,
+                  transform: isActive ? "translateY(0)" : isPast ? "translateY(-12px)" : "translateY(12px)",
+                  transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out",
+                  pointerEvents: isActive ? "auto" : "none",
                 }}
-                aria-hidden={textOpacity(p, slide.min, slide.max) < 0.5}
+                aria-hidden={!isActive}
               >
-                <h1
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight drop-shadow-lg leading-tight"
-                  style={{ opacity: 1 - p * 0.15 }}
-                >
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight drop-shadow-lg leading-tight">
                   {slide.title}
                 </h1>
                 <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-white/90 max-w-xl mx-auto">
@@ -133,17 +95,17 @@ export default function HeroScroll() {
                     Herramienta gratuita para la comunidad de desarrolladores
                   </span>
                 </div>
-                <div className="mt-4 sm:mt-6 flex justify-center w-full">
+                <div className="mt-4 sm:mt-6 flex justify-center w-full pointer-events-auto relative z-10">
                   <DownloadCTA variant="hero" />
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* Columna derecha: video (completo, sin recortar) — placeholder mientras carga */}
-        <div className="flex-1 min-w-0 relative bg-[#000] order-1 md:order-2 h-[40vh] md:h-full flex items-center justify-center p-4">
-          {/* Placeholder: personaje mientras carga el video */}
+        {/* Columna derecha: video — sin fondo opaco para que se vea Antigravity detrás */}
+        <div className="flex-1 min-w-0 relative order-1 md:order-2 h-[40vh] md:h-full flex items-center justify-center p-4">
           <img
             src={PLACEHOLDER_IMAGE}
             alt=""
@@ -166,41 +128,22 @@ export default function HeroScroll() {
           />
         </div>
 
-        {/* Cards a la derecha (posición original) */}
-        <div className="absolute right-4 sm:right-8 md:right-12 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-3 max-w-[200px] pointer-events-none max-md:hidden">
-          <div
-            className="rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-white/95 text-sm shadow-xl transition-transform duration-200"
-            style={{
-              transform: `translateX(${(1 - textOpacity(p, 0.15, 0.4)) * 80}px)`,
-              opacity: textOpacity(p, 0.12, 0.45),
-            }}
-          >
-            <span className="font-semibold">Contenido</span>
-            <br />
-            <span className="text-white/80">Genera y refina tu mensaje</span>
-          </div>
-          <div
-            className="rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-white/95 text-sm shadow-xl transition-transform duration-200"
-            style={{
-              transform: `translateX(${(1 - textOpacity(p, 0.4, 0.65)) * 80}px)`,
-              opacity: textOpacity(p, 0.38, 0.7),
-            }}
-          >
-            <span className="font-semibold">Speech y notas</span>
-            <br />
-            <span className="text-white/80">Tu guion y notas de orador</span>
-          </div>
-          <div
-            className="rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-white/95 text-sm shadow-xl transition-transform duration-200"
-            style={{
-              transform: `translateX(${(1 - textOpacity(p, 0.65, 0.92)) * 80}px)`,
-              opacity: textOpacity(p, 0.63, 0.95),
-            }}
-          >
-            <span className="font-semibold">Imágenes</span>
-            <br />
-            <span className="text-white/80">Generación visual integrada</span>
-          </div>
+        {/* Cards en la esquina inferior derecha, en fila horizontal */}
+        <div className="absolute right-4 sm:right-8 md:right-12 bottom-6 sm:bottom-8 md:bottom-10 z-10 flex flex-row flex-wrap gap-2 sm:gap-3 pointer-events-none max-md:hidden">
+          {HERO_CARDS.map((card, i) => (
+            <div
+              key={i}
+              className="rounded-xl bg-white/10 backdrop-blur-md border border-white/20 px-4 py-3 text-white/95 text-sm shadow-xl transition-all duration-500"
+              style={{
+                opacity: cardIndex === i ? 1 : 0.35,
+                transform: cardIndex === i ? "translateX(0)" : "translateX(20px)",
+              }}
+            >
+              <span className="font-semibold">{card.label}</span>
+              <br />
+              <span className="text-white/80">{card.desc}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
