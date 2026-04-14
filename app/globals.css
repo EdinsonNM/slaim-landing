@@ -14,6 +14,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif-hero: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-body-landing: var(--font-space-grotesk), ui-sans-serif, system-ui,
+    sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,6 +26,16 @@
     --foreground: #ededed;
     --scrollbar-thumb: #000;
     --scrollbar-thumb-hover: #1a1a1a;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 

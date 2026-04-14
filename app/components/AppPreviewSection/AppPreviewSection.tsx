@@ -50,19 +50,20 @@ export default function AppPreviewSection() {
 
   return (
     <section
-      className="w-full py-16 sm:py-20 md:py-24 px-4 bg-black/80"
+      id="vista-previa"
+      className="w-full border-t border-zinc-200 bg-white py-16 sm:py-20 md:py-24 px-4"
       aria-label="Vista previa de la aplicación Slaim"
     >
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-3">
+      <div className="mx-auto max-w-4xl">
+        <h2 className="mb-3 text-center font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl md:text-4xl">
           Así se ve Slaim
         </h2>
-        <p className="text-white/70 text-center text-sm sm:text-base max-w-xl mx-auto mb-10 sm:mb-12">
+        <p className="mx-auto mb-10 max-w-xl text-center font-[family-name:var(--font-body-landing)] text-sm text-zinc-600 sm:mb-12 sm:text-base">
           Escribe tu tema, elige el modelo y crea presentaciones en minutos.
         </p>
 
         {/* Carrusel de imágenes con transición */}
-        <div className="relative w-full aspect-[16/10] min-h-[240px] sm:min-h-[280px] rounded-xl sm:rounded-2xl overflow-hidden">
+        <div className="relative aspect-[16/10] min-h-[240px] w-full overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-sm sm:min-h-[280px] sm:rounded-2xl">
           {PREVIEW_IMAGES.map((img, i) => (
             <div
               key={img.src}
@@ -85,14 +86,14 @@ export default function AppPreviewSection() {
           ))}
           {/* Indicadores */}
           <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
-            <div className="flex gap-1.5 rounded-full bg-black/50 px-2 py-1.5">
+            <div className="flex gap-1.5 rounded-full border border-zinc-200/80 bg-white/90 px-2 py-1.5 shadow-sm backdrop-blur-sm">
               {PREVIEW_IMAGES.map((_, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setIndex(i)}
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    i === index ? "w-5 bg-white" : "w-2 bg-white/50 hover:bg-white/70"
+                    i === index ? "w-5 bg-zinc-900" : "w-2 bg-zinc-300 hover:bg-zinc-400"
                   }`}
                   aria-label={`Ver captura ${i + 1} de ${PREVIEW_IMAGES.length}`}
                 />
@@ -102,7 +103,7 @@ export default function AppPreviewSection() {
         </div>
 
         {/* Descripción que explica cómo funciona la app en esta pantalla */}
-        <p className="mt-4 text-white/80 text-center text-sm sm:text-base max-w-2xl mx-auto">
+        <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-zinc-600 sm:text-base">
           {PREVIEW_IMAGES[index].description}
         </p>
       </div>

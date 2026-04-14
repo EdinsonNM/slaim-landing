@@ -86,11 +86,12 @@ export default function DownloadCTA({ variant = "section" }: { variant?: Variant
 
   const isHero = variant === "hero";
   const baseClass =
-    "inline-flex items-center justify-center gap-2 sm:gap-2.5 rounded-xl font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] text-sm sm:text-base";
+    "inline-flex min-h-11 items-center justify-center gap-2 sm:gap-2.5 font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-sm sm:text-base cursor-pointer";
   const heroClass =
-    "px-4 py-3 sm:px-6 sm:py-3.5 bg-white text-zinc-900 hover:bg-white/90 shadow-lg hover:shadow-xl min-w-0";
+    "rounded-full px-8 py-3.5 sm:px-10 sm:py-4 bg-zinc-900 text-white hover:bg-zinc-800 focus-visible:ring-zinc-400 focus-visible:ring-offset-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.22)] min-w-0";
+  const sectionRounded = "rounded-xl";
   const sectionClass =
-    "px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-zinc-900 hover:bg-white/90";
+    `${sectionRounded} px-6 sm:px-8 py-3.5 sm:py-4 border border-zinc-200 bg-white text-zinc-900 shadow-sm hover:border-zinc-300 hover:bg-zinc-50 focus-visible:ring-blue-500 focus-visible:ring-offset-white`;
   const buttonClass = `${baseClass} ${isHero ? heroClass : sectionClass}`;
   const iconSize = isHero ? "w-4 h-4 sm:w-5 sm:h-5" : "w-5 h-5 sm:w-6 sm:h-6";
 
