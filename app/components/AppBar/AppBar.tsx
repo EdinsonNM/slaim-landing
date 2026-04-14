@@ -42,11 +42,26 @@ export default function AppBar() {
               <Link href="/#contenido-principal" className={navLinkClass}>
                 Inicio
               </Link>
+              <Link href="/#caracteristicas" className={navLinkClass}>
+                <span className="sm:hidden" title="Características">
+                  Features
+                </span>
+                <span className="hidden sm:inline">Características</span>
+              </Link>
+              <Link
+                href="/#destacados"
+                className={`${navLinkClass} hidden lg:inline-flex`}
+              >
+                Destacados
+              </Link>
               <Link href="/#vista-previa" className={navLinkClass}>
                 <span className="sm:hidden" title="Vista previa">
                   App
                 </span>
                 <span className="hidden sm:inline">Vista previa</span>
+              </Link>
+              <Link href="/#faq" className={`${navLinkClass} hidden md:inline-flex`}>
+                FAQ
               </Link>
             </nav>
 

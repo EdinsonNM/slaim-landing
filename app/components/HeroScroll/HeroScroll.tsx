@@ -4,9 +4,9 @@ import gsap from "gsap";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import {
-  HiOutlineDocumentText,
+  HiOutlineCode,
+  HiOutlineLightningBolt,
   HiOutlineMicrophone,
-  HiOutlinePhotograph,
 } from "react-icons/hi";
 import { HiChevronDown } from "react-icons/hi2";
 import DownloadCTA from "@/app/components/DownloadCTA/DownloadCTA";
@@ -17,49 +17,51 @@ const ROTATION_INTERVAL_MS = 4500;
 
 const HERO_SLIDES: { title: string; subtitle: string }[] = [
   {
-    title: "¿Cuántas horas perdiste esta semana en diapositivas?",
+    title: "Presenta producto, marketing, demos o arquitectura con claridad.",
     subtitle:
-      "La audiencia recuerda tu mensaje, no tu diseño. Llega directo al punto.",
+      "Slides con IA que sirven para vender la idea, contar el roadmap o enseñar cómo funciona por dentro. Markdown, diagramas y código en un solo flujo.",
   },
   {
-    title: "Tu idea merece ser escuchada.",
+    title: "Del borrador al deck listo para la reunión, sin perder el hilo.",
     subtitle:
-      "Genera el contenido, refínalo y preséntalo. Sin atascarte en formatos.",
+      "Gemini u OpenAI integrados, modo presentador con notas y guion sugerido. Exporta a .pptx o vídeo con el look de tu marca.",
   },
   {
-    title: "De la idea al escenario en minutos.",
+    title: "Pitch de startup, propuesta comercial o review técnica: mismo lugar.",
     subtitle:
-      "Slaim escribe contigo el guion, las notas de orador y las imágenes. Tú solo comunica.",
+      "Imágenes coherentes, slides que se editan rápido y diagramas cuando hay que mostrar flujos o arquitectura sin marear a nadie.",
   },
   {
-    title: "Presentaciones que enganchan. Cero estrés.",
-    subtitle: "Menos tiempo en slides. Más impacto en la sala.",
+    title: "Cuando hace falta código, se ve bien. Cuando no, también.",
+    subtitle:
+      "Bloques con resaltado, Excalidraw y Mermaid para que el mensaje quede prolijo en sala, sea para clientes o para el equipo.",
   },
   {
-    title: "Listo para presentar sin romperte la cabeza?",
-    subtitle: "Descarga Slaim y deja que tu mensaje brille.",
+    title: "¿Tu próximo pitch o demo? Aquí lo armas y lo presentas mejor.",
+    subtitle:
+      "App nativa con Tauri: ligera y rápida. Uso local gratis; cuenta opcional para la experiencia unificada.",
   },
 ];
 
 const HERO_FEATURES: {
-  Icon: typeof HiOutlineDocumentText;
+  Icon: typeof HiOutlineCode;
   title: string;
   desc: string;
 }[] = [
   {
-    Icon: HiOutlineDocumentText,
-    title: "Contenido claro",
-    desc: "Genera y refina tu mensaje sin perder el hilo.",
+    Icon: HiOutlineCode,
+    title: "Markdown y código",
+    desc: "Para marketing, producto o ingeniería: slides que se leen bien en sala.",
+  },
+  {
+    Icon: HiOutlineLightningBolt,
+    title: "IA en el editor",
+    desc: "Pasa de la idea al deck con texto, imágenes y estructura que avanzan contigo.",
   },
   {
     Icon: HiOutlineMicrophone,
-    title: "Speech y notas",
-    desc: "Tu guion y notas de orador listos para el escenario.",
-  },
-  {
-    Icon: HiOutlinePhotograph,
-    title: "Imágenes integradas",
-    desc: "Visuales coherentes con lo que vas a decir.",
+    title: "Presentador y export",
+    desc: "Notas, guion sugerido, .pptx y vídeo alineados a tu tema.",
   },
 ];
 
@@ -203,7 +205,7 @@ export default function HeroScroll() {
     <section
       id="contenido-principal"
       className="relative isolate min-h-[100dvh] bg-white font-[family-name:var(--font-body-landing)]"
-      aria-label="Slaim: enfócate en comunicar, no en las diapositivas"
+      aria-label="Slaim: presentaciones con Markdown, diagramas e IA para producto, marketing y equipos técnicos"
     >
       <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-[90rem] flex-col justify-between px-5 pb-8 pt-[5.75rem] sm:px-8 sm:px-10 sm:pt-28 md:px-12 md:pt-32 lg:px-16">
         <div className="flex min-h-0 flex-1 flex-col justify-center py-6 sm:py-8">
@@ -211,7 +213,7 @@ export default function HeroScroll() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-14 xl:gap-16">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <p className="mb-6 text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400 sm:mb-8 sm:text-xs">
-              Herramienta gratuita · comunidad de desarrolladores
+              Tauri · React 19 · licencia MIT
             </p>
 
             <h1
@@ -292,7 +294,7 @@ export default function HeroScroll() {
           >
             {HERO_FEATURES.map(({ Icon, title, desc }) => (
               <li key={title} className="flex flex-col items-center px-2">
-                <span className="mb-4 flex size-11 items-center justify-center rounded-full border border-zinc-200/90 bg-white text-zinc-700 shadow-sm">
+                <span className="mb-4 flex size-11 items-center justify-center rounded-full border border-zinc-200/90 bg-white text-zinc-700 shadow-[0_10px_28px_-12px_rgba(244,63,94,0.35),0_4px_14px_-6px_rgba(15,23,42,0.08)]">
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <span className="text-sm font-semibold tracking-tight text-zinc-900">

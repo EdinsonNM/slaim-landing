@@ -1,7 +1,12 @@
 import AppBar from "@/app/components/AppBar/AppBar";
 import { AppPreviewSection } from "@/app/components/AppPreviewSection";
+import { FaqSection } from "@/app/components/FaqSection";
+import { FeaturesBentoSection } from "@/app/components/FeaturesBentoSection";
 import { Footer } from "@/app/components/Footer";
 import { HeroScroll } from "@/app/components/HeroScroll";
+import { HighlightsCarouselSection } from "@/app/components/HighlightsCarouselSection";
+import { HowItWorksSection } from "@/app/components/HowItWorksSection";
+import { StackPillsSection } from "@/app/components/StackPillsSection";
 
 export default function Home() {
   return (
@@ -14,7 +19,12 @@ export default function Home() {
       </a>
       <AppBar />
       <HeroScroll />
+      <HighlightsCarouselSection />
+      <FeaturesBentoSection />
+      <StackPillsSection />
+      <HowItWorksSection />
       <AppPreviewSection />
+      <FaqSection />
       <Footer />
     </div>
   );
