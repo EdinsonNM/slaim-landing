@@ -27,7 +27,7 @@ const HERO_SLIDES: { title: string; subtitle: string }[] = [
       "Gemini u OpenAI integrados, modo presentador con notas y guion sugerido. Exporta a .pptx o vídeo con el look de tu marca.",
   },
   {
-    title: "Pitch de startup, propuesta comercial o review técnica: mismo lugar.",
+    title: "Presentación de tu proyecto, propuesta comercial o reunión técnica: mismo lugar.",
     subtitle:
       "Imágenes coherentes, slides que se editan rápido y diagramas cuando hay que mostrar flujos o arquitectura sin marear a nadie.",
   },
@@ -37,7 +37,7 @@ const HERO_SLIDES: { title: string; subtitle: string }[] = [
       "Bloques con resaltado, Excalidraw y Mermaid para que el mensaje quede prolijo en sala, sea para clientes o para el equipo.",
   },
   {
-    title: "¿Tu próximo pitch o demo? Aquí lo armas y lo presentas mejor.",
+    title: "¿Tu próxima presentación o demostración? Aquí la preparas y la presentas mejor.",
     subtitle:
       "App nativa con Tauri: ligera y rápida. Uso local gratis; cuenta opcional para la experiencia unificada.",
   },
@@ -262,12 +262,12 @@ export default function HeroScroll() {
               <div className="absolute bottom-[8%] left-[38%] h-48 w-48 rounded-full bg-violet-200/35 blur-[64px] motion-reduce:blur-2xl" />
             </div>
 
-            <div className="relative overflow-hidden rounded-[1.65rem] bg-zinc-100 shadow-[0_28px_80px_-28px_rgba(15,23,42,0.18)] ring-1 ring-zinc-200/90 sm:rounded-[2rem]">
-              <div className="aspect-[4/3] w-full sm:aspect-video">
+            <div className="relative overflow-hidden rounded-[1.65rem] bg-transparent shadow-[0_28px_80px_-28px_rgba(15,23,42,0.18)] ring-1 ring-zinc-200/90 sm:rounded-[2rem]">
+              <div className="relative aspect-[4/3] w-full sm:aspect-video">
                 <video
                   ref={videoRef}
                   src={VIDEO_SRC}
-                  className={`h-full w-full object-cover object-center transition-opacity duration-700 motion-reduce:transition-none ${
+                  className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 motion-reduce:transition-none ${
                     videoReady ? "opacity-100" : "opacity-0"
                   }`}
                   autoPlay
@@ -278,10 +278,34 @@ export default function HeroScroll() {
                 />
                 {!videoReady ? (
                   <div
-                    className="absolute inset-0 bg-zinc-100 motion-reduce:animate-none"
+                    className="absolute inset-0 bg-zinc-200 motion-reduce:animate-none"
                     aria-hidden
                   />
                 ) : null}
+                {/* Degradado casi imperceptible: solo un leve apoyo si el vídeo oscurece la esquina */}
+                <div
+                  className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-[min(7rem,28%)] bg-gradient-to-r from-black/[0.07] to-transparent sm:w-[min(7.5rem,30%)] sm:from-black/[0.09]"
+                  aria-hidden
+                />
+                {/* Línea de acento a altura completa de la tarjeta */}
+                <div
+                  className="pointer-events-none absolute inset-y-0 left-0 z-[2] w-[3px] bg-gradient-to-b from-rose-400 via-rose-500 to-rose-600 sm:w-1"
+                  aria-hidden
+                />
+                <div className="pointer-events-none absolute inset-x-0 top-0 z-[3] px-5 pb-3 pl-4 pt-5 sm:px-7 sm:pb-4 sm:pl-5 sm:pt-6">
+                  <p className="font-[family-name:var(--font-serif-hero)] text-[1.65rem] font-normal leading-[1.05] tracking-[-0.02em] text-lime-600 [text-shadow:0_1px_0_rgba(255,255,255,0.5)] sm:text-[1.85rem] sm:text-lime-500 md:text-3xl md:text-lime-500">
+                    Slaim
+                  </p>
+                  <p className="mt-2 max-w-[11rem] text-[13px] leading-snug text-zinc-500/90 [text-shadow:0_1px_0_rgba(255,255,255,0.55)] sm:mt-2.5 sm:max-w-[14rem] sm:text-sm sm:leading-relaxed sm:text-zinc-500">
+                    Presentaciones con Markdown, diagramas e IA: para clientes, marketing y mostrar cómo funciona tu producto.
+                  </p>
+                </div>
+                <span
+                  className="pointer-events-none absolute bottom-2 right-2.5 z-[3] rounded border border-zinc-300/60 bg-white/45 px-1.5 py-0.5 font-mono text-[10px] font-medium tabular-nums text-zinc-500 backdrop-blur-[2px] sm:bottom-2.5 sm:right-3 sm:text-[11px]"
+                  aria-hidden
+                >
+                  1
+                </span>
               </div>
             </div>
           </div>
