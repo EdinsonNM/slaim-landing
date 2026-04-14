@@ -231,15 +231,15 @@ export default function HighlightsCarouselSection() {
             </p>
           </div>
 
-          <div className="mx-auto flex max-w-5xl flex-col items-stretch gap-5 px-4 pb-10 pt-8 sm:flex-row sm:items-center sm:gap-3 sm:px-6 sm:pb-12 sm:pt-10 md:pb-14 md:pt-12">
+          <div className="mx-auto flex max-w-5xl flex-col items-stretch gap-4 px-4 pb-10 pt-8 sm:flex-row sm:items-center sm:gap-3 sm:px-6 sm:pb-12 sm:pt-10 md:pb-14 md:pt-12">
             <button
               type="button"
-              className="order-2 mx-auto inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-zinc-900/10 bg-white/85 text-zinc-800 shadow-sm backdrop-blur-sm transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-safe:active:scale-[0.97] sm:order-1 sm:mx-0 sm:self-center"
+              className="order-2 hidden size-10 shrink-0 items-center justify-center rounded-full border border-zinc-200/80 bg-white/50 text-zinc-400 shadow-none backdrop-blur-sm transition hover:border-zinc-300/90 hover:bg-white/85 hover:text-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 motion-safe:active:scale-[0.97] sm:order-1 sm:mx-0 sm:inline-flex sm:self-center"
               aria-controls={slideId}
               aria-label="Destacado anterior"
               onClick={() => go(-1)}
             >
-              <HiChevronLeft className="size-5" aria-hidden />
+              <HiChevronLeft className="size-[1.15rem]" strokeWidth={1.75} aria-hidden />
             </button>
 
             <div className="order-1 flex min-w-0 flex-1 flex-col gap-8 sm:order-2 lg:flex-row lg:items-center lg:gap-10">
@@ -275,6 +275,24 @@ export default function HighlightsCarouselSection() {
                   className="will-change-transform [transform-style:preserve-3d]"
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-zinc-900/10 bg-white/60 shadow-[0_24px_60px_-28px_rgba(15,23,42,0.35)] ring-1 ring-white/50 backdrop-blur-[2px]">
+                    <button
+                      type="button"
+                      className="absolute left-1.5 top-1/2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-white/35 text-zinc-500 shadow-sm backdrop-blur-md transition hover:bg-white/65 hover:text-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 motion-safe:active:scale-[0.97] sm:hidden"
+                      aria-controls={slideId}
+                      aria-label="Destacado anterior"
+                      onClick={() => go(-1)}
+                    >
+                      <HiChevronLeft className="size-4 opacity-90" aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      className="absolute right-1.5 top-1/2 z-10 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-white/35 text-zinc-500 shadow-sm backdrop-blur-md transition hover:bg-white/65 hover:text-zinc-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 motion-safe:active:scale-[0.97] sm:hidden"
+                      aria-controls={slideId}
+                      aria-label="Siguiente destacado"
+                      onClick={() => go(1)}
+                    >
+                      <HiChevronRight className="size-4 opacity-90" aria-hidden />
+                    </button>
                     <Image
                       src={slide.image.src}
                       alt={slide.image.alt}
@@ -290,12 +308,12 @@ export default function HighlightsCarouselSection() {
 
             <button
               type="button"
-              className="order-3 mx-auto inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-zinc-900/10 bg-white/85 text-zinc-800 shadow-sm backdrop-blur-sm transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 motion-safe:active:scale-[0.97] sm:mx-0 sm:self-center"
+              className="order-3 hidden size-10 shrink-0 items-center justify-center rounded-full border border-zinc-200/80 bg-white/50 text-zinc-400 shadow-none backdrop-blur-sm transition hover:border-zinc-300/90 hover:bg-white/85 hover:text-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 motion-safe:active:scale-[0.97] sm:mx-0 sm:inline-flex sm:self-center"
               aria-controls={slideId}
               aria-label="Siguiente destacado"
               onClick={() => go(1)}
             >
-              <HiChevronRight className="size-5" aria-hidden />
+              <HiChevronRight className="size-[1.15rem]" strokeWidth={1.75} aria-hidden />
             </button>
           </div>
 
